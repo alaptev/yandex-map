@@ -27,6 +27,7 @@ ymaps.modules.define('AnimatedLine', [
         // Создадим массив с более частым расположением промежуточных точек.
         this._smoothCoords = generateSmoothCoords(geometry, this._animationInterval);
     }
+
     defineClass(AnimatedLine, Polyline, {
         // Анимировать линию.
         start: function() {
@@ -69,6 +70,7 @@ ymaps.modules.define('AnimatedLine', [
         }
 
     });
+
     // Функция генерации частых координат по заданной линии.
     function generateSmoothCoords(coords, interval) {
         var smoothCoords = [];
@@ -87,6 +89,7 @@ ymaps.modules.define('AnimatedLine', [
         }
         return smoothCoords;
     }
+
     // Функция нахождения расстояния между двумя точками на плоскости.
     function getDistance(point1, point2) {
         return Math.sqrt(
@@ -94,5 +97,6 @@ ymaps.modules.define('AnimatedLine', [
             Math.pow((point2[1] - point1[1]), 2)
         );
     }
+
     provide(AnimatedLine);
 });

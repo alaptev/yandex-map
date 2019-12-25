@@ -8,6 +8,7 @@ function init(ymaps) {
     }, {
         searchControlProvider: 'yandex#search'
     });
+
     // Создаем ломаные линии.
     var firstAnimatedLine = new ymaps.AnimatedLine([
         [55.76028460519329, 37.57704491961252],
@@ -29,6 +30,7 @@ function init(ymaps) {
         // Задаем длительность анимации.
         animationTime: 4000
     });
+
     var secondAnimatedLine = new ymaps.AnimatedLine([
         [55.761223661714205, 37.57854299428123],
         [55.76129474190374, 37.57836060406823],
@@ -48,6 +50,7 @@ function init(ymaps) {
         strokeWidth: 5,
         animationTime: 4000
     });
+
     // Добавляем линии на карту.
     myMap.geoObjects.add(firstAnimatedLine);
     myMap.geoObjects.add(secondAnimatedLine);
@@ -61,6 +64,7 @@ function init(ymaps) {
     var thirdPoint = new ymaps.Placemark([55.763105418792314, 37.57724573612205], {}, {
         preset: 'islands#blackZooIcon'
     });
+
     // Функция анимации пути.
     function playAnimation() {
         // Убираем вторую линию.
@@ -92,6 +96,7 @@ function init(ymaps) {
                 playAnimation();
             });
     }
+
     // Запускаем анимацию пути.
     playAnimation();
 }
