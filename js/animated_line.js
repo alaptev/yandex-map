@@ -12,46 +12,49 @@ ymaps.modules.define('AnimatedLine', [
      * @param {Boolean} [options.animationTime = 4000] Длительность анимации.
      **/
     // Конструктор класса
-    function AnimatedLine(geometry, properties, options) {
+    function AnimatedLine(GpsDataSet, properties, options) {
         console.log('---log---  AnimatedLine() ')
-        AnimatedLine.superclass.constructor.call(this, geometry, properties, options);
+        AnimatedLine.superclass.constructor.call(this, GpsDataSet, properties, options);
         this._loopTime = 50;
-        //TODO: animation Time will be counted from geo dataset
-        this._animationTime = this.options.get('animationTime', 4000);
+        var finishTime = Date.parse(GpsDataSet[GpsDataSet.length-1][2])
+        console.log('---log--- finishTime = ', finishTime)
+        var startTime = Date.parse(GpsDataSet[0][2])
+        console.log('---log--- startTime = ', startTime)
+        this._animationTime =  finishTime - startTime;
+        console.log('---log--- this._animationTime = ', this._animationTime)
         // Вычислим длину ВСЕЙ переданной линии.
-        var distance = 0;
-        var previousElem = geometry[0];
+        var wholeDistance = 0;
+        var previousElem = GpsDataSet[0];
         this.geometry.getCoordinates().forEach(function(elem) {
-            distance += getDistance(elem, previousElem);
+            wholeDistance += getDistance(elem, previousElem);
             previousElem = elem;
         });
         // Вычислим минимальный интервал отрисовки.
-        // вроде как скорость получается
-        this._animationInterval = distance / this._animationTime * this._loopTime;
+        this._minAnimationDistance = wholeDistance / this._animationTime * this._loopTime;
         // Создадим массив с более частым расположением промежуточных точек.
-        this._smoothCoords = generateSmoothCoords(geometry, this._animationInterval);
+        this._smoothCoords = generateSmoothCoords(GpsDataSet, this._minAnimationDistance);
     }
 
     defineClass(AnimatedLine, Polyline, {
         // Анимировать линию.
         _start: function() {
             console.log('---log--- _start()')
-            var value = 0;
+            var DataSetIndex = 0;
             var coords = this._smoothCoords;
             var line = this;
             var loopTime = this._loopTime;
-            // Будем добавлять по одной точке каждые 50 мс.
-            function loop(value, currentTime, previousTime) {
-                if (value < coords.length) {
+            // Будем добавлять по одной точке каждые 'loopTime' мс.
+            function loop(DataSetIndex, currentTime, previousTime) {
+                if (DataSetIndex < coords.length) {
                     if (!currentTime || (currentTime - previousTime) > loopTime) {
-                        console.log('---log--- value = ', value)
-                        console.log('---log--- coords[value] = ', coords[value])
-                        line.geometry.set(value, coords[value]);
-                        value++;
+                        console.log('---log--- DataSetIndex = ', DataSetIndex)
+                        console.log('---log--- coords[DataSetIndex] = ', coords[DataSetIndex])
+                        line.geometry.set(DataSetIndex, coords[DataSetIndex]);
+                        DataSetIndex++;
                         previousTime = currentTime;
                     }
                     requestAnimationFrame(function(time) {
-                        loop(value, time, previousTime || time)
+                        loop(DataSetIndex, time, previousTime || time)
                     });
                 } else {
                     // Бросаем событие окончания отрисовки линии.
@@ -59,7 +62,7 @@ ymaps.modules.define('AnimatedLine', [
                 }
             }
 
-            loop(value);
+            loop(DataSetIndex);
         },
         // Убрать отрисованную линию.
         reset: function() {
