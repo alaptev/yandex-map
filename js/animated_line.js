@@ -11,11 +11,14 @@ ymaps.modules.define('AnimatedLine', [
      * @class AnimatedLine. Представляет собой геообъект с геометрией geometry.LineString.
      * @param {Boolean} [options.animationTime = 4000] Длительность анимации.
      **/
+    // Конструктор класса
     function AnimatedLine(geometry, properties, options) {
+        console.log('---log---  AnimatedLine() ')
         AnimatedLine.superclass.constructor.call(this, geometry, properties, options);
         this._loopTime = 50;
+        //TODO: animation Time will be counted from geo dataset
         this._animationTime = this.options.get('animationTime', 4000);
-        // Вычислим длину переданной линии.
+        // Вычислим длину ВСЕЙ переданной линии.
         var distance = 0;
         var previousElem = geometry[0];
         this.geometry.getCoordinates().forEach(function(elem) {
@@ -23,6 +26,7 @@ ymaps.modules.define('AnimatedLine', [
             previousElem = elem;
         });
         // Вычислим минимальный интервал отрисовки.
+        // вроде как скорость получается
         this._animationInterval = distance / this._animationTime * this._loopTime;
         // Создадим массив с более частым расположением промежуточных точек.
         this._smoothCoords = generateSmoothCoords(geometry, this._animationInterval);
@@ -30,7 +34,8 @@ ymaps.modules.define('AnimatedLine', [
 
     defineClass(AnimatedLine, Polyline, {
         // Анимировать линию.
-        start: function() {
+        _start: function() {
+            console.log('---log--- _start()')
             var value = 0;
             var coords = this._smoothCoords;
             var line = this;
@@ -39,6 +44,8 @@ ymaps.modules.define('AnimatedLine', [
             function loop(value, currentTime, previousTime) {
                 if (value < coords.length) {
                     if (!currentTime || (currentTime - previousTime) > loopTime) {
+                        console.log('---log--- value = ', value)
+                        console.log('---log--- coords[value] = ', coords[value])
                         line.geometry.set(value, coords[value]);
                         value++;
                         previousTime = currentTime;
@@ -56,12 +63,14 @@ ymaps.modules.define('AnimatedLine', [
         },
         // Убрать отрисованную линию.
         reset: function() {
+            console.log('---log--- reset()')
             this.geometry.setCoordinates([]);
         },
         // Запустить полный цикл анимации.
         animate: function() {
+            console.log('---log--- animate()')
             this.reset();
-            this.start();
+            this._start();
             var deferred = vow.defer();
             this.events.once('animationfinished', function() {
                 deferred.resolve();
@@ -93,8 +102,7 @@ ymaps.modules.define('AnimatedLine', [
     // Функция нахождения расстояния между двумя точками на плоскости.
     function getDistance(point1, point2) {
         return Math.sqrt(
-            Math.pow((point2[0] - point1[0]), 2) +
-            Math.pow((point2[1] - point1[1]), 2)
+            Math.pow((point2[0] - point1[0]), 2) + Math.pow((point2[1] - point1[1]), 2)
         );
     }
 
