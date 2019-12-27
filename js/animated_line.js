@@ -84,12 +84,12 @@ ymaps.modules.define('AnimatedLine', [
     });
 
     // Функция генерации частых координат по заданной линии.
-    function generateSmoothCoords(coords, interval) {
+    function generateSmoothCoords(coords, minDistance) {
         var smoothCoords = [];
         smoothCoords.push(coords[0]);
         for (var i = 1; i < coords.length; i++) {
             var difference = [coords[i][0] - coords[i - 1][0], coords[i][1] - coords[i - 1][1]];
-            var maxAmount = Math.max(Math.abs(difference[0] / interval), Math.abs(difference[1] / interval));
+            var maxAmount = Math.max(Math.abs(difference[0] / minDistance), Math.abs(difference[1] / minDistance));
             var minDifference = [difference[0] / maxAmount, difference[1] / maxAmount];
             var lastCoord = coords[i - 1];
             while (maxAmount > 1) {
@@ -104,9 +104,12 @@ ymaps.modules.define('AnimatedLine', [
 
     // Функция нахождения расстояния между двумя точками на плоскости.
     function getDistance(point1, point2) {
-        return Math.sqrt(
-            Math.pow((point2[0] - point1[0]), 2) + Math.pow((point2[1] - point1[1]), 2)
+        console.log('---log--- point1 = ', point1)
+        var d = Math.sqrt(
+          Math.pow((point2[0] - point1[0]), 2) + Math.pow((point2[1] - point1[1]), 2)
         );
+        console.log('---log--- distance = ', d)
+        return d
     }
 
     provide(AnimatedLine);
