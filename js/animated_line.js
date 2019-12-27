@@ -18,15 +18,15 @@ ymaps.modules.define('AnimatedLine', [
     console.log('---log---  AnimatedLine() ')
     AnimatedLine.superclass.constructor.call(this, GpsDataSet, properties, options);
     this._loopTime = 50;
-    var finishTime = Date.parse(GpsDataSet[GpsDataSet.length-1][2])
+    const finishTime = Date.parse(GpsDataSet[GpsDataSet.length-1][2])
     console.log('---log--- finishTime = ', finishTime)
-    var startTime = Date.parse(GpsDataSet[0][2])
+    const startTime = Date.parse(GpsDataSet[0][2])
     console.log('---log--- startTime = ', startTime)
     this._animationTime =  finishTime - startTime;
     console.log('---log--- this._animationTime = ', this._animationTime)
     // Вычислим длину ВСЕЙ переданной линии.
-    var wholeDistance = 0;
-    var previousElem = GpsDataSet[0];
+    let wholeDistance = 0;
+    let previousElem = GpsDataSet[0];
     this.geometry.getCoordinates().forEach(function(elem) {
       wholeDistance += getDistance(elem, previousElem);
       previousElem = elem;
@@ -42,22 +42,22 @@ ymaps.modules.define('AnimatedLine', [
     // Анимировать линию.
     _start: function() {
       console.log('---log--- _start()')
-      var DataSetIndex = 0;
-      var coords = this._smoothCoords;
-      var line = this;
-      var loopTime = this._loopTime;
+      let index = 0;
+      const coords = this._smoothCoords;
+      let line = this;
+      const loopTime = this._loopTime;
       // Будем добавлять по одной точке каждые 'loopTime' мс.
-      function loop(DataSetIndex, currentTime, previousTime) {
-        if (DataSetIndex < coords.length) {
+      function loop(index, currentTime, previousTime) {
+        if (index < coords.length) {
           if (!currentTime || (currentTime - previousTime) > loopTime) {
-            console.log('---log--- DataSetIndex = ', DataSetIndex)
-            console.log('---log--- coords[DataSetIndex] = ', coords[DataSetIndex])
-            line.geometry.set(DataSetIndex, coords[DataSetIndex]);
-            DataSetIndex++;
+            console.log('---log--- index = ', index)
+            console.log('---log--- coords[index] = ', coords[index])
+            line.geometry.set(index, coords[index]);
+            index++;
             previousTime = currentTime;
           }
           requestAnimationFrame(function(time) {
-            loop(DataSetIndex, time, previousTime || time)
+            loop(index, time, previousTime || time)
           });
         } else {
           console.timeEnd('animation_time');
@@ -67,7 +67,7 @@ ymaps.modules.define('AnimatedLine', [
       }
 
       console.time('animation_time')
-      loop(DataSetIndex);
+      loop(index);
     },
     // Убрать отрисованную линию.
     reset: function() {
@@ -79,7 +79,7 @@ ymaps.modules.define('AnimatedLine', [
       console.log('---log--- animate()')
       this.reset();
       this._start();
-      var deferred = vow.defer();
+      let deferred = vow.defer();
       this.events.once('animation_finished_event', function() {
         deferred.resolve();
       });
@@ -90,13 +90,13 @@ ymaps.modules.define('AnimatedLine', [
 
   // Функция генерации частых координат по заданной линии.
   function generateSmoothCoords(coords, minDistance) {
-    var smoothCoords = [];
+    let smoothCoords = [];
     smoothCoords.push(coords[0]);
-    for (var i = 1; i < coords.length; i++) {
-      var difference = [coords[i][0] - coords[i - 1][0], coords[i][1] - coords[i - 1][1]];
-      var maxAmount = Math.max(Math.abs(difference[0] / minDistance), Math.abs(difference[1] / minDistance));
-      var minDifference = [difference[0] / maxAmount, difference[1] / maxAmount];
-      var lastCoord = coords[i - 1];
+    for (let i = 1; i < coords.length; i++) {
+      let difference = [coords[i][0] - coords[i - 1][0], coords[i][1] - coords[i - 1][1]];
+      let maxAmount = Math.max(Math.abs(difference[0] / minDistance), Math.abs(difference[1] / minDistance));
+      let minDifference = [difference[0] / maxAmount, difference[1] / maxAmount];
+      let lastCoord = coords[i - 1];
       while (maxAmount > 1) {
         lastCoord = [lastCoord[0] + minDifference[0], lastCoord[1] + minDifference[1]];
         smoothCoords.push(lastCoord);
@@ -110,7 +110,7 @@ ymaps.modules.define('AnimatedLine', [
   // Функция нахождения расстояния между двумя точками на плоскости.
   function getDistance(point1, point2) {
     console.log('---log--- point1 = ', point1)
-    var d = Math.sqrt(
+    const d = Math.sqrt(
       Math.pow((point2[0] - point1[0]), 2) + Math.pow((point2[1] - point1[1]), 2)
     );
     console.log('---log--- distance = ', d)

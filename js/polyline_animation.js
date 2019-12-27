@@ -8,17 +8,17 @@ ymaps.ready(['AnimatedLine']).then(init);
 function init(ymaps) {
   console.log('---log---  init')
   // Создаем карту.
-  var myMap = new ymaps.Map("map", {
+  const myMap = new ymaps.Map('map', {
     center: [45.345374032, 40.138917891],
     type: 'yandex#satellite',
     zoom: 25,  // max=19
     controls: [] // карта без элементов управления
   }, {
     searchControlProvider: 'yandex#search'
-  });
+  })
 
   // Создаем ломаные линии.
-  var firstAnimatedLine = new ymaps.AnimatedLine([
+  const firstAnimatedLine = new ymaps.AnimatedLine([
     [45.345374032, 40.138917891, '2019-11-02 06:44:08.000000'],
     [45.345373894, 40.138917596, '2019-11-02 06:44:08.400000'],
     [45.345373764, 40.138917889, '2019-11-02 06:44:08.600000'],
@@ -50,14 +50,14 @@ function init(ymaps) {
     [45.345370357, 40.138921587, '2019-11-02 06:44:13.800000']
   ], {}, {
     // Задаем цвет.
-    strokeColor: "#ED4543",
+    strokeColor: '#ED4543',
     // Задаем ширину линии.
     strokeWidth: 5,
     // Задаем длительность анимации.
     // animationTime: 5000
-  });
+  })
 
-  // var secondAnimatedLine = new ymaps.AnimatedLine([
+  // const secondAnimatedLine = new ymaps.AnimatedLine([
   //     [55.761223661714205, 37.57854299428123],
   //     [55.76129474190374, 37.57836060406823],
   //     [55.76149285834102, 37.57855640532632],
@@ -81,13 +81,13 @@ function init(ymaps) {
   myMap.geoObjects.add(firstAnimatedLine);
   // myMap.geoObjects.add(secondAnimatedLine);
   // Создаем метки.
-  // var firstPoint = new ymaps.Placemark([55.7602953585417, 37.57705113964169], {}, {
+  // const firstPoint = new ymaps.Placemark([55.7602953585417, 37.57705113964169], {}, {
   //     preset: 'islands#redRapidTransitCircleIcon'
   // });
-  // var secondPoint = new ymaps.Placemark([55.76127880650197, 37.57839413202077], {}, {
+  // const secondPoint = new ymaps.Placemark([55.76127880650197, 37.57839413202077], {}, {
   //     preset: 'islands#blueMoneyCircleIcon'
   // });
-  // var thirdPoint = new ymaps.Placemark([55.763105418792314, 37.57724573612205], {}, {
+  // const thirdPoint = new ymaps.Placemark([55.763105418792314, 37.57724573612205], {}, {
   //     preset: 'islands#blackZooIcon'
   // });
 
