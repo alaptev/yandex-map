@@ -33,12 +33,14 @@ ymaps.modules.define('AnimatedLine', [
         this._minAnimationDistance = wholeDistance / this._animationTime * this._loopTime;
         // Создадим массив с более частым расположением промежуточных точек.
         this._smoothCoords = generateSmoothCoords(GpsDataSet, this._minAnimationDistance);
+        // this._smoothCoords = GpsDataSet
     }
 
     defineClass(AnimatedLine, Polyline, {
         // Анимировать линию.
         _start: function() {
             console.log('---log--- _start()')
+            console.time('animation_time')
             var DataSetIndex = 0;
             var coords = this._smoothCoords;
             var line = this;
@@ -59,6 +61,7 @@ ymaps.modules.define('AnimatedLine', [
                 } else {
                     // Бросаем событие окончания отрисовки линии.
                     line.events.fire('animationfinished');
+                    console.timeEnd('animation_time');
                 }
             }
 
