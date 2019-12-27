@@ -45,7 +45,7 @@ ymaps.modules.define('AnimatedLine', [
       var line = this;
       var loopTime = this._loopTime;
       // Будем добавлять по одной точке каждые 'loopTime' мс.
-      function loop_old(DataSetIndex, currentTime, previousTime) {
+      function loop(DataSetIndex, currentTime, previousTime) {
         if (DataSetIndex < coords.length) {
           if (!currentTime || (currentTime - previousTime) > loopTime) {
             console.log('---log--- DataSetIndex = ', DataSetIndex)
