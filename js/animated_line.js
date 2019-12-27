@@ -60,7 +60,7 @@ ymaps.modules.define('AnimatedLine', [
                 } else {
                     console.timeEnd('animation_time');
                     // Бросаем событие окончания отрисовки линии.
-                    line.events.fire('animationfinished');
+                    line.events.fire('animation_finished_event');
                 }
             }
 
@@ -78,7 +78,7 @@ ymaps.modules.define('AnimatedLine', [
             this.reset();
             this._start();
             var deferred = vow.defer();
-            this.events.once('animationfinished', function() {
+            this.events.once('animation_finished_event', function() {
                 deferred.resolve();
             });
             return deferred.promise();
