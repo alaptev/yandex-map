@@ -1,3 +1,8 @@
+"use strict";
+
+const DEBUG = true
+if (DEBUG !== true) { console.log = ()=>{} }
+
 ymaps.ready(['AnimatedLine']).then(init);
 
 function init(ymaps) {
