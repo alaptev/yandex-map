@@ -1,3 +1,5 @@
+"use strict";
+
 ymaps.modules.define('AnimatedLine', [
   'util.defineClass',
   'Polyline',
