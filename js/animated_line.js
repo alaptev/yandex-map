@@ -40,7 +40,6 @@ ymaps.modules.define('AnimatedLine', [
         // Анимировать линию.
         _start: function() {
             console.log('---log--- _start()')
-            console.time('animation_time')
             var DataSetIndex = 0;
             var coords = this._smoothCoords;
             var line = this;
@@ -59,12 +58,13 @@ ymaps.modules.define('AnimatedLine', [
                         loop(DataSetIndex, time, previousTime || time)
                     });
                 } else {
+                    console.timeEnd('animation_time');
                     // Бросаем событие окончания отрисовки линии.
                     line.events.fire('animationfinished');
-                    console.timeEnd('animation_time');
                 }
             }
 
+            console.time('animation_time')
             loop(DataSetIndex);
         },
         // Убрать отрисованную линию.
