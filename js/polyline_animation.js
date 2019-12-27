@@ -6,7 +6,8 @@ function init(ymaps) {
     var myMap = new ymaps.Map("map", {
         center: [45.345374032, 40.138917891],
         type: 'yandex#satellite',
-        zoom: 25  // max=19
+        zoom: 25,  // max=19
+        controls: [] // карта без элементов управления
     }, {
         searchControlProvider: 'yandex#search'
     });

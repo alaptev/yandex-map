@@ -33,4 +33,4 @@ https://tech.yandex.ru/maps/jsbox/2.1/polyline_animation
 https://tech.yandex.ru/maps/jsbox/2.1/data_load_jquery  - загрузка данных
 https://tech.yandex.ru/maps/jsbox/2.1/object_manager    - загрузка данных
 https://tech.yandex.ru/maps/jsbox/2.1/object_manager_geojson - Добавление на карту GeoJSON файла из Конструктора карт
-https://tech.yandex.ru/maps/jsbox/2.1/ymapsml_maptype  - Карту переключить в режим спутника.
+
