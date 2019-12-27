@@ -34,8 +34,8 @@ ymaps.modules.define('AnimatedLine', [
     // Вычислим минимальный интервал отрисовки.
     this._minAnimationDistance = wholeDistance / this._animationTime * this._loopTime;
     // Создадим массив с более частым расположением промежуточных точек.
-    this._smoothCoords = generateSmoothCoords(GpsDataSet, this._minAnimationDistance);
-    // this._smoothCoords = GpsDataSet
+    // this._smoothCoords = generateSmoothCoords(GpsDataSet, this._minAnimationDistance);
+    this._smoothCoords = GpsDataSet
   }
 
   defineClass(AnimatedLine, Polyline, {
@@ -47,7 +47,7 @@ ymaps.modules.define('AnimatedLine', [
       let line = this;
       const loopTime = this._loopTime;
       // Будем добавлять по одной точке каждые 'loopTime' мс.
-      function loop(index, currentTime, previousTime) {
+      function loop_old(index, currentTime, previousTime) {
         if (index < coords.length) {
           if (!currentTime || (currentTime - previousTime) > loopTime) {
             console.log('---log--- index = ', index)
@@ -58,6 +58,28 @@ ymaps.modules.define('AnimatedLine', [
           }
           requestAnimationFrame(function(time) {
             loop(index, time, previousTime || time)
+          });
+        } else {
+          console.timeEnd('animation_time');
+          // Бросаем событие окончания отрисовки линии.
+          line.events.fire('animation_finished_event');
+        }
+      }
+
+      function loop(index, previousTime) {
+        if (index < coords.length) {
+          let waitTime = 0
+          if (index !== 0) { waitTime = getTimestamp(coords[index]) - getTimestamp(coords[index-1]) }
+          console.log('---log--- waitTime = ', waitTime)
+          let currentTime = Date.now()
+          if (index === 0 || (currentTime - previousTime) >= waitTime) {
+            console.log('---log--- set coords['+index+'] = ', coords[index])
+            line.geometry.set(index, coords[index]);
+            index++;
+            previousTime = currentTime;
+          }
+          requestAnimationFrame(function(time) {
+            loop(index, previousTime || time)
           });
         } else {
           console.timeEnd('animation_time');
@@ -116,6 +138,8 @@ ymaps.modules.define('AnimatedLine', [
     console.log('---log--- distance = ', d)
     return d
   }
+
+  function getTimestamp(point) { return Date.parse(point[2]) }
 
   provide(AnimatedLine);
 });
