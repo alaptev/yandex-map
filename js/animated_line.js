@@ -81,9 +81,8 @@ ymaps.modules.define('AnimatedLine', [
             previousTime = currentTime;
           }
 
-          requestAnimationFrame(function(time) {
-            console.log('---log--- time = ', time)
-            loop(index, previousTime || time)
+          requestAnimationFrame(function() {
+            loop(index, previousTime || 0)
           });
 
         } else {
