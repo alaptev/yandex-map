@@ -48,7 +48,7 @@ function init_map(ymaps, filteredDataSet) {
   const myMap = new ymaps.Map('map', {
     center: [45.345374032, 40.138917891],
     type: 'yandex#satellite',
-    zoom: 19, //25,  // max=19
+    zoom: 19, //25,  // max=19 - максимальный масштаб при котором есть картинки местности
     controls: [] // карта без элементов управления
   }, {
     searchControlProvider: 'yandex#search'
