@@ -36,13 +36,13 @@ $.getJSON("gps_kropotkino.json")
     console.log('---log--- filteredDataSet.length = ', filteredDataSet.length)
     ymaps.ready(['AnimatedLine']).then((ymaps) => {
       console.log('---log--- ymaps = ', ymaps);
-      init(ymaps, filteredDataSet);
+      init_map(ymaps, filteredDataSet);
     })
 
   });
 
-function init(ymaps, filteredDataSet) {
-  console.log('---log--- init')
+function init_map(ymaps, filteredDataSet) {
+  console.log('---log--- init_map')
   console.log('---log--- filteredDataSet.length = ', filteredDataSet.length)
 
   // Создаем карту.
@@ -66,28 +66,5 @@ function init(ymaps, filteredDataSet) {
   // Добавляем линю на карту.
   myMap.geoObjects.add(animatedLine);
 
-  // Функция анимации пути.
-  function playAnimation() {
-    animatedLine.animate()
-      // После окончания анимации первой линии добавляем вторую метку на карту и анимируем вторую линию.
-      // .then(function() {
-      //     // myMap.geoObjects.add(secondPoint);
-      //     return secondAnimatedLine.animate();
-      // })
-      // После окончания анимации второй линии добавляем третью метку на карту.
-      .then(function() {
-        // myMap.geoObjects.add(thirdPoint);
-        // Добавляем паузу после анимации.
-        return ymaps.vow.delay(null, 2000);
-      })
-      // После паузы перезапускаем анимацию.
-      .then(function() {
-        // Перезапускаем анимацию.
-        // playAnimation();
-      });
-  }
-
-  console.log('---log--- playAnimation()')
-  // Запускаем анимацию пути.
-  playAnimation();
+  animatedLine.animate()
 }
