@@ -1,6 +1,6 @@
 "use strict";
 
-const DEBUG = true
+const DEBUG = false
 if (DEBUG !== true) { console.log = ()=>{} }
 
 // 1. load json data; resolve(data)
@@ -72,5 +72,6 @@ function init_map(ymaps, filteredDataSet) {
   //   //animatedLine.geometry.remove(0);
   // });
 
+  // NOTE: comment this line to see whole path without animation
   animatedLine.animate()
 }
